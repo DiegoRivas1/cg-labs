@@ -52,12 +52,43 @@ void drawCircleSequenceConcentric(float cx, float cy, float radius, int count, f
 }
 // Ejercicio 3b
 void drawCircleSequenceConcentricLeft(float leftEdge, float cy, float radius, int count, float reductionPct, int segments) {
+
     for (int i = 0; i < count; ++i) {
-        float cx = leftEdge + radius;   // centro se desplaza para fijar el borde izquierdo
+        const float cx = leftEdge + radius;   // centro se desplaza para fijar el borde izquierdo
+        drawCircle(cx, cy, radius, segments);
+        radius *= (1.0f - reductionPct);
+    }
+
+    //drawCircleSequenceConcentric(leftEdge + radius, cy, radius, count, reductionPct, segments);
+}
+
+// Ejercicio 3c borde derecho fijo
+void drawCircleSequenceConcentricRight(float rightEdge, float cy, float radius, int count, float reductionPct, int segments) {
+    for (int i = 0; i < count; ++i) {
+        float cx = rightEdge - radius;  // centro se desplaza para fijar el borde derecho
         drawCircle(cx, cy, radius, segments);
         radius *= (1.0f - reductionPct);
     }
 }
+
+// Ejercicio 3d borde superior fijo
+void drawCircleSequenceConcentricTop(float cx, float topEdge, float radius, int count, float reductionPct, int segments) {
+    for (int i = 0; i < count; ++i) {
+        float cy = topEdge - radius;    // centro baja para fijar el borde superior
+        drawCircle(cx, cy, radius, segments);
+        radius *= (1.0f - reductionPct);
+    }
+}
+
+// Ejercicio 3e borde inferior fijo
+void drawCircleSequenceConcentricBottom(float cx, float bottomEdge, float radius, int count, float reductionPct, int segments) {
+    for (int i = 0; i < count; ++i) {
+        float cy = bottomEdge + radius; // centro sube para fijar el borde inferior
+        drawCircle(cx, cy, radius, segments);
+        radius *= (1.0f - reductionPct);
+    }
+}
+
 //Ejercicio 4
 void drawCircleSequenceHorizontal(float cx, float cy, float radius, int count, float reductionPct, int segments) {
     float currentX = cx;

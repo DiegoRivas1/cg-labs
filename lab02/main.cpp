@@ -37,6 +37,15 @@ void render() {
     glColor3f(1.0f, 0.4f, 0.4f);
     drawCircleSequenceConcentricLeft(-0.9f, 0.0f, 0.4f, 5, 0.25f, 64);
 
+    //Ejercicio 3c Tdoaso los circulos tocan el  borde derecho en x = 0.9
+    drawCircleSequenceConcentricRight(0.9f, 0.0f, 0.4f, 5, 0.25f, 64);
+
+    //Ejercicio 3d todos los circu;os tocan el  borde superior en y = 0.9
+    drawCircleSequenceConcentricTop(0.0f, 0.9f, 0.4f, 5, 0.25f, 64);
+
+    //Ejercicio 3e todos los circulos tocan el borde inferior en y = -0.9
+    drawCircleSequenceConcentricBottom(0.0f, -0.9f, 0.4f, 5, 0.25f, 64);
+
     // Ejercicio 4 Círculos horizontales
     glColor3f(0.4f, 1.0f, 0.5f);   // verde
     //  Empieza en la izquierda, radio 0.12, 5 círculos, reducción 20%

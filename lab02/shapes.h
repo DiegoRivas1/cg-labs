@@ -17,6 +17,15 @@ void drawCircleSequenceConcentric(float cx, float cy, float radius, int count, f
 // Ejercicio 3b: Igual pero todos comparten el borde izquierdo en 'leftEdge'
 void drawCircleSequenceConcentricLeft(float leftEdge, float cy, float radius, int count, float reductionPct, int segments);
 
+// Ejercicio 3c: Todos comparten el borde derecho en 'rightEdge'
+void drawCircleSequenceConcentricRight(float rightEdge, float cy, float radius, int count, float reductionPct, int segments);
+
+// Ejercicio 3d: Todos comparten el borde superior en 'topEdge'
+void drawCircleSequenceConcentricTop(float cx, float topEdge, float radius, int count, float reductionPct, int segments);
+
+// Ejercicio 3e: Todos comparten el borde inferior en 'bottomEdge'
+void drawCircleSequenceConcentricBottom(float cx, float bottomEdge, float radius, int count, float reductionPct, int segments);
+
 // Ejercicio 4 Círculos alineados horizontalmente, cada uno a la derecha del anterior
 void drawCircleSequenceHorizontal(float cx, float cy, float radius, int count, float reductionPct, int segments);
 
