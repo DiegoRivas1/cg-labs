@@ -31,5 +31,7 @@ void drawCircleSequenceHorizontal(float cx, float cy, float radius, int count, f
 
 // Ejercicio 5: Círculos en espiral, cada uno rotado 'angleDeg' grados respecto al anterior
 void drawCircleSequenceSpiral(float cx, float cy, float radius, int count, float reductionPct, float angleDeg, int segments);
+//Ejercicio 5a: ciruclos alineados en una recta
+void drawCircleSequenceLine(float cx, float cy, float radius, int count, float reductionPct, float angleDeg, int segments);
 
 #endif //CG_LABS_SHAPES_H

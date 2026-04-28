@@ -126,3 +126,21 @@ void drawCircleSequenceSpiral(float cx, float cy, float radius, int count, float
         angle  += angleDeg;  // rotar el ángulo para el siguiente círculo
     }
 }
+
+void drawCircleSequenceLine(float cx, float cy, float radius, int count, float reductionPct, float angleDeg, int segments) {
+    // Convertir una sola vez, el ángulo no cambia
+    float rad = angleDeg * PI / 180.0f;
+
+    for (int i = 0; i < count; ++i) {
+        drawCircle(cx, cy, radius, segments);
+
+        float nextRadius = radius * (1.0f - reductionPct);
+        float dist = radius + nextRadius;
+
+        // Siempre la misma dirección
+        cx += dist * std::cos(rad);
+        cy += dist * std::sin(rad);
+
+        radius = nextRadius;
+    }
+}
