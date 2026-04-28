@@ -1,6 +1,6 @@
 # cg-labs
 
-Laboratorios de Computación Gráfica — UNSA
+Laboratorios de Computación Gráfica
 
 ## Estructura
 
@@ -11,7 +11,7 @@ cg-labs/
 │   └── utils.cmake        ← detección automática de labs
 ├── external/              ← GLAD + GLFW
 ├── cmake-build-debug/     ← generado por CLion (no se sube al repo)
-├── lab02/
+├── lab02-transformaciones/
 ├── lab03/
 └── ...
 ```
@@ -76,7 +76,7 @@ cmake .. -G "MinGW Makefiles" \
 cmake --build .
 
 # Ejecutar un lab
-./lab02/lab02.exe
+./lab02-transformaciones/lab02_transformaciones.exe
 ```
 
 > Ajusta el path de `gcc.exe` según donde tengas instalado MSYS2.  
@@ -91,11 +91,11 @@ Para compilar únicamente un laboratorio específico sin recompilar todo:
 
 ```bash
 # Solo compilar lab02
-cmake --build . --target lab02
+cmake --build . --target lab02_transformaciones
 
 # Compilar y ejecutar
-cmake --build . --target lab02 && ./lab02/lab02.exe
+cmake --build . --target lab02_transformaciones && ./lab02-transformaciones/lab02_transformaciones.exe
 ```
 
 > En CLion el equivalente es seleccionar el target en el selector de configuraciones
-> (arriba a la derecha) y presionar `▶ Run` solo compila ese lab.
+> (arriba a la derecha) y presionar `▶ Run` — solo compila ese lab.
