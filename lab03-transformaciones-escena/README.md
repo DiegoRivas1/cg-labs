@@ -59,5 +59,3 @@ Sin uso de GLUT las primitivas (esfera, toro, cubo) se implementan manualmente e
 
 ### Ejercicio 4 — Sistema solar
 ![Ejercicio 4](screenshots/eje4.png)
-
-> Coloca tus capturas en `lab03-transformaciones-escena/screenshots/`.
