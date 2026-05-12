@@ -76,7 +76,8 @@ cmake .. -G "MinGW Makefiles" \
 cmake --build .
 
 # Ejecutar un lab
-./lab02-transformaciones/lab02_transformaciones.exe
+cd lab03-transformaciones-escena
+./lab03_transformaciones_escena.exe
 ```
 
 > Ajusta el path de `gcc.exe` según donde tengas instalado MSYS2.  
