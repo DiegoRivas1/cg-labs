@@ -92,10 +92,12 @@ Para compilar únicamente un laboratorio específico sin recompilar todo:
 
 ```bash
 # Solo compilar lab02
-cmake --build . --target lab02_transformaciones
+cmake --build . --target lab03_transformaciones_escena
+cd lab03-transformaciones-escena
 
 # Compilar y ejecutar
-cmake --build . --target lab02_transformaciones && ./lab02-transformaciones/lab02_transformaciones.exe
+./lab03_transformaciones_escena.exe
+cd ..
 ```
 
 > En CLion el equivalente es seleccionar el target en el selector de configuraciones
