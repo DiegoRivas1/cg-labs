@@ -9,6 +9,7 @@ add_executable(lab02_transformaciones
         main.cpp
         shapes.cpp
         ${EXTERNAL_DIR}/glad/src/glad.c
+        ../lab04-transformaciones-jerarquicas/scene_homogeneous.h
 )
 
 target_include_directories(lab02_transformaciones PRIVATE

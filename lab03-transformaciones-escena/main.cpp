@@ -6,9 +6,10 @@
 #include <GLFW/glfw3.h>
 #include <GL/glu.h>
 
+//#include "../shared/OBJLoader.h"
+//#include "../shared/Primitives.h"
 #include "OBJLoader.h"
-#include "primitives.h"
-
+#include "Primitives.h"
 constexpr int   WIDTH  = 1000;
 constexpr int   HEIGHT = 900;
 constexpr char  TITLE[]= "Lab 03 - Transformaciones en OpenGL";
