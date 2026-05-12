@@ -77,3 +77,12 @@ Al usar `glScalef` con escalados no uniformes, OpenGL escala también las normal
 
 ### Escena 5 — Composición manual
 ![Escena 5](screenshots/esc5.gif)
+
+### Escena 6 — Lab03 Ej1 con homogéneas
+![Escena 6](screenshots/esc6.gif)
+
+### Escena 7 — Lab03 Ej2 con homogéneas
+![Escena 7](screenshots/esc7.gif)
+
+### Escena 8 — Lab03 Ej3 con homogéneas
+![Escena 8](screenshots/esc8.gif)
