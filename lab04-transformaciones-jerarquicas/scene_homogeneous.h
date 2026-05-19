@@ -60,8 +60,8 @@ void renderP2Ej2(float t) {
     glPopMatrix();
 }
 
-// Parte II — Ejercicio 3
-// Rota -> traslada → escala, tusando matrices maueale combiandas
+// Parte II Ejercicio 3
+// Rota -> traslada -> escala, tusando matrices maueale combiandas
 void renderP2Ej3(float t) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();

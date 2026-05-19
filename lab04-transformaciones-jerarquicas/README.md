@@ -1,4 +1,4 @@
-# Lab03 Transformaciones Jerárquicas y Homogéneas
+# Lab04 Transformaciones Jerárquicas y Homogéneas
 
 **Curso:** Computación Gráfica
 **Fecha:** 11 de mayo de 2026

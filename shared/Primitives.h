@@ -4,11 +4,21 @@
 
 constexpr float TAU = 6.28318530717958647692f;
 
-// Esfera
+// Esfera TAU/4 = PI/2
+/*
+El problema es el rango de latitud. Con TAU/4.0f * (-1 + i/stacks) cuando i va de 0 a stacks-1,
+el rango va de -TAU/4 hasta casi 0 — solo el hemisferio inferior.
+Necesitas que llegue hasta +TAU/4:
+
+El 2.0f hace que cuando i = stacks, el valor llegue a TAU/4 * (-1 + 2) = TAU/4 = π/2. Sin el 2.0f,
+cuando i = stacks llegamos a TAU/4 * (-1 + 1) = 0.
+Eso es exactamente la mitad del recorrido.
+ */
 inline void drawSphere(float radius, int slices, int stacks) {
+
     for (int i = 0; i < stacks; ++i) {
-        float lat0 = TAU / 4.0f * (-1.0f + (float)i       / stacks);
-        float lat1 = TAU / 4.0f * (-1.0f + (float)(i + 1) / stacks);
+        float lat0 = TAU / 4.0f * (-1.0f + 2.0f * (float)i       / stacks);
+        float lat1 = TAU / 4.0f * (-1.0f + 2.0f * (float)(i + 1) / stacks);
         float z0  = std::sin(lat0), zr0 = std::cos(lat0);
         float z1  = std::sin(lat1), zr1 = std::cos(lat1);
 

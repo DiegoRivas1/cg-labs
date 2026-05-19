@@ -118,7 +118,7 @@ void renderRoboticArm() {
     glPopMatrix();
 }
 
-// Parte I — Ejercicio 4: Figura humana
+// Parte I Ejercicio 4 Figura humana
 void renderHumanFigure(float t) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();

@@ -4,7 +4,7 @@
 #include <cmath>
 #include <glad/glad.h>
 
-// Una matriz 4x4 en column-major mimsma entrada que opnegl
+// Una matriz 4x4 en column-major mimsma entrada que opneg
 struct Mat4 {
     float m[16] = {
         1,0,0,0,
