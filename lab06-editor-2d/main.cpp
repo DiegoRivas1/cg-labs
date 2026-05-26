@@ -74,8 +74,8 @@ static void keyCallback(GLFWwindow* w, const int key, int, const int action, int
         case GLFW_KEY_DOWN:  editor.translateSelected( 0.0f, -0.05f); break;
         case GLFW_KEY_R:     editor.rotateSelected(5.0f);             break;
         case GLFW_KEY_T:     editor.rotateSelected(-5.0f);            break;
-        case GLFW_KEY_EQUAL: editor.scaleSelected(1.1f, 1.1f);        break;
-        case GLFW_KEY_MINUS: editor.scaleSelected(0.9f, 0.9f);        break;
+        case GLFW_KEY_KP_ADD: editor.scaleSelected(1.1f, 1.1f);        break;
+        case GLFW_KEY_KP_SUBTRACT: editor.scaleSelected(0.9f, 0.9f);        break;
         default: break;
     }
 }
