@@ -57,7 +57,12 @@ static void keyCallback(GLFWwindow* w, const int key, int, const int action, int
     if (action != GLFW_PRESS && action != GLFW_REPEAT) return;
 
     switch (key) {
-        case GLFW_KEY_ESCAPE: glfwSetWindowShouldClose(w, GLFW_TRUE); break;
+        case GLFW_KEY_ESCAPE:
+            if (editor.mode == EditorMode::Select)
+                editor.scene.clearSelection();
+            else
+                glfwSetWindowShouldClose(w, GLFW_TRUE);
+            break;
         case GLFW_KEY_1: editor.setMode(EditorMode::Point);    break;
         case GLFW_KEY_2: editor.setMode(EditorMode::Line);     break;
         case GLFW_KEY_3: editor.setMode(EditorMode::Polyline); break;
@@ -161,7 +166,10 @@ int main() {
     std::cout << "Lab 06 - Editor Grafico 2D\n"
               << "  [1] Punto  [2] Linea  [3] Polilinea  [4] Poligono  [5] Seleccion\n"
               << "  Flechas: trasladar  R/T: rotar  +/-: escalar  DEL: eliminar\n"
-              << "  Clic derecho / ESC: cancelar figura\n";
+              << "  Clic derecho / ESC: cancelar figura\n"
+              << "  Enter: finalizar polilinea\n"
+              << "  F: alternar relleno\n"
+              << "  Click Derecho finalizar poligono\n";
 
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();

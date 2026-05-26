@@ -1,7 +1,6 @@
-# lab06-editor-2d — Editor Gráfico 2D en OpenGL
+# Laboratorio 06 Editor Gráfico 2D en OpenGL
 
-**Curso:** Computación Gráfica — UNSA  
-**Autor:** Percy Maldonado Quispe  
+**Curso:** Computación Gráfica 
 **Fecha:** 25 de mayo de 2026
 
 ## Descripción
@@ -11,10 +10,15 @@ Editor gráfico 2D interactivo con panel lateral (Dear ImGui). Permite crear, se
 ---
 
 ## Dependencias adicionales
+Se descargo de https://github.com/ocornut/imgui/releases la versión 1.92.8 de ImGui, que es la que se usó para el desarrollo del proyecto.
 
+El repositorio tiene en la ruta: 
 ```bash
-pacman -S mingw-w64-ucrt-x86_64-imgui
+external/imgui/
 ```
+la versión de ImGui que se usó para el desarrollo.
+
+Y tambien imgui-1.92.8 en la raiz del proyecto, ahi estan todas las funciones.
 
 ---
 
@@ -37,7 +41,7 @@ Shape  (abstracta)
 ├── PolylineShape
 └── PolygonShape
 
-ShapeFactory::create(ShapeType) → unique_ptr<Shape>
+ShapeFactory::create(ShapeType) -> unique_ptr<Shape>
 ```
 
 ---
@@ -73,18 +77,21 @@ ShapeFactory::create(ShapeType) → unique_ptr<Shape>
 ## Capturas
 
 ### Panel y herramienta de puntos
-![Puntos](screenshots/points.png)
+![Puntos](screenshots/points.gif)
 
-### Líneas y polilíneas
-![Líneas](screenshots/lines.png)
+### Líneas
+![Líneas](screenshots/lines.gif)
+
+### Polilíneas
+![Líneas](screenshots/polylines.gif)
 
 ### Polígonos con relleno
-![Polígonos](screenshots/polygons.png)
+![Poligonos](screenshots/polygons.gif)
 
 ### Selección y transformaciones
-![Transformaciones](screenshots/transforms.png)
+![Transformaciones](screenshots/transforms.gif)
 
 ### Escena final
-![Escena final](screenshots/scene_final.png)
+![Escena final](screenshots/scene_final.gif)
 
-> Coloca tus capturas en `lab06-editor-2d/screenshots/`.
+

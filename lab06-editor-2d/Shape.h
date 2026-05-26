@@ -214,6 +214,21 @@ public:
         popTransform();
     }
 
+    /*
+    Vértice 1
+            /\
+           /  \
+          /    \
+    ------●------ <- Lanza rayo horizontal desde el clic
+         /      \
+        /        \
+       /          \
+    Vértice 2   Vértice 3
+
+    - Cuenta las intersecciones del rayo con los bordes
+    - Impar = DENTRO
+    - Par = FUERA
+     */
     [[nodiscard]] bool contains(float x, float y) const override {
         // Ray casting
         bool inside = false;
