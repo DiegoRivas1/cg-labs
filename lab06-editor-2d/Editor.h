@@ -70,21 +70,21 @@ public:
     }
 
     // Transformaciones sobre objeto seleccionado
-    void translateSelected(float dx, float dy) {
+    void translateSelected(float dx, float dy) const {
         if (!scene.selected) return;
-        Mat4 T = mat4Translate(dx, dy, 0.0f);
+        const Mat4 T = mat4Translate(dx, dy, 0.0f);
         scene.selected->applyTransform(T);
     }
 
-    void rotateSelected(float deg) {
+    void rotateSelected(float deg) const {
         if (!scene.selected) return;
-        Mat4 R = mat4RotateZ(deg);
+        const Mat4 R = mat4RotateZ(deg);
         scene.selected->applyTransform(R);
     }
 
-    void scaleSelected(float sx, float sy) {
+    void scaleSelected(float sx, float sy) const {
         if (!scene.selected) return;
-        Mat4 S = mat4Scale(sx, sy, 1.0f);
+        const Mat4 S = mat4Scale(sx, sy, 1.0f);
         scene.selected->applyTransform(S);
     }
 
@@ -111,7 +111,7 @@ public:
         glDisable(GL_LINE_STIPPLE);
     }
 
-    std::string modeName() const {
+    [[nodiscard]] std::string modeName() const {
         switch (mode) {
             case EditorMode::Point:    return "Point";
             case EditorMode::Line:     return "Line";
@@ -123,7 +123,7 @@ public:
     }
 
 private:
-    ShapeType modeToType(EditorMode m) const {
+    [[nodiscard]] ShapeType modeToType(EditorMode m) const {
         switch (m) {
             case EditorMode::Point:    return ShapeType::Point;
             case EditorMode::Line:     return ShapeType::Line;

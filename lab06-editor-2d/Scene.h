@@ -1,4 +1,5 @@
 #pragma once
+#include <ranges>
 #include <vector>
 #include <memory>
 #include <algorithm>
@@ -20,10 +21,10 @@ public:
     // Selecciona el objeto más cercano al punto dado
     Shape* selectAt(float x, float y) {
         clearSelection();
-        for (auto it = objects.rbegin(); it != objects.rend(); ++it) {
-            if ((*it)->contains(x, y)) {
-                (*it)->selected = true;
-                selected = it->get();
+        for (auto & object : std::ranges::reverse_view(objects)) {
+            if (object->contains(x, y)) {
+                object->selected = true;
+                selected = object.get();
                 return selected;
             }
         }
@@ -36,11 +37,8 @@ public:
     }
 
     void deleteSelected() {
-        objects.erase(
-            std::remove_if(objects.begin(), objects.end(),
-                [](const std::unique_ptr<Shape>& s){ return s->selected; }),
-            objects.end()
-        );
+        std::erase_if(objects,
+                      [](const std::unique_ptr<Shape>& s){ return s->selected; });
         selected = nullptr;
     }
 
@@ -49,5 +47,5 @@ public:
         selected = nullptr;
     }
 
-    int count() const { return (int)objects.size(); }
+    [[nodiscard]] int count() const { return static_cast<int>(objects.size()); }
 };

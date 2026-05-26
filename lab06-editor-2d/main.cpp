@@ -19,15 +19,20 @@ constexpr char TITLE[]= "Lab 06 - Editor Grafico 2D";
 static Editor editor;
 
 // Convierte coordenadas de pantalla a coordenadas del mundo OpenGL
-static void screenToWorld(GLFWwindow* w, double sx, double sy, float& wx, float& wy) {
+//Offset del punto el problema es la conversión screenToWorld.
+//El viewport de dibujo empieza en x=220 pero la conversión usa el ancho total de la ventana.
+static void screenToWorld(GLFWwindow* w, const double sx, const double sy, float& wx, float& wy) {
     int width, height;
     glfwGetWindowSize(w, &width, &height);
-    wx = (float)sx / width  *  2.0f - 1.0f;
-    wy = -((float)sy / height * 2.0f - 1.0f);
+    const int drawWidth = width - 220;  // descontar el panel
+    const float nx = static_cast<float>(sx - 220) / drawWidth;  // normalizamos solo en el area de dibujo
+    const float aspect = static_cast<float>(drawWidth) / height;
+    wx = (nx * 2.0f - 1.0f) * aspect;
+    wy = -(static_cast<float>(sy) / height * 2.0f - 1.0f);
 }
 
 // Callbacks
-static void mouseButtonCallback(GLFWwindow* w, int button, int action, int) {
+static void mouseButtonCallback(GLFWwindow* w, const int button, const int action, int) {
     if (ImGui::GetIO().WantCaptureMouse) return;
     if (action != GLFW_PRESS) return;
 
@@ -40,14 +45,14 @@ static void mouseButtonCallback(GLFWwindow* w, int button, int action, int) {
     if (button == GLFW_MOUSE_BUTTON_RIGHT) editor.onRightClick(wx, wy);
 }
 
-static void cursorPosCallback(GLFWwindow* w, double sx, double sy) {
+static void cursorPosCallback(GLFWwindow* w, const double sx, const double sy) {
     float wx, wy;
     screenToWorld(w, sx, sy, wx, wy);
     editor.mouseX = wx;
     editor.mouseY = wy;
 }
 
-static void keyCallback(GLFWwindow* w, int key, int, int action, int) {
+static void keyCallback(GLFWwindow* w, const int key, int, const int action, int) {
     if (ImGui::GetIO().WantCaptureKeyboard) return;
     if (action != GLFW_PRESS && action != GLFW_REPEAT) return;
 
@@ -78,7 +83,7 @@ static void keyCallback(GLFWwindow* w, int key, int, int action, int) {
 // Panel ImGui
 static void drawUI() {
     ImGui::SetNextWindowPos({0, 0});
-    ImGui::SetNextWindowSize({220, (float)HEIGHT});
+    ImGui::SetNextWindowSize({220, static_cast<float>(HEIGHT)});
     ImGui::Begin("Editor", nullptr,
         ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
         ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus);
@@ -173,7 +178,7 @@ int main() {
         glViewport(220, 0, WIDTH - 220, HEIGHT);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        float aspect = (float)(WIDTH - 220) / HEIGHT;
+        constexpr float aspect = static_cast<float>(WIDTH - 220) / HEIGHT;
         glOrtho(-aspect, aspect, -1.0, 1.0, -1.0, 1.0);
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
