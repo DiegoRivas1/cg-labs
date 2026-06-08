@@ -53,6 +53,10 @@ Editor gráfico 3D interactivo con panel lateral ImGui. Permite crear, seleccion
 | `Q` | Zoom out (Libre) |
 | `ESC` | Salir |
 
+
+* La tecla Del suele ser 'Delete' o 'Supr' dependiendo del teclado.
+* Las teclas PgUp y PgDn suelen ser 'Page Up' y 'Page Down' respectivamente.
+* Las teclas PgUp y PgDn tambien suelen ser 'Repag' = 'Page Up' y 'AvPag' = 'Page Down' respectivamente.
 ---
 
 ## Características adicionales
@@ -76,6 +80,7 @@ Editor gráfico 3D interactivo con panel lateral ImGui. Permite crear, seleccion
 ![Wireframe](screenshots/wireframe.png)
 
 ### Cámara trackball inspeccionando la escena
-![Trackball](screenshots/trackball.png)
+![Trackball](screenshots/trackball.gif)
 
-> Coloca tus capturas en `lab07-editor-3d/screenshots/`.
+### Demostracion final de todo el funcionamiento
+![Demostracion](screenshots/demo.gif)
