@@ -19,8 +19,8 @@ constexpr char TITLE[]= "Lab 06 - Editor Grafico 2D";
 static Editor editor;
 
 // Convierte coordenadas de pantalla a coordenadas del mundo OpenGL
-//Offset del punto el problema es la conversión screenToWorld.
-//El viewport de dibujo empieza en x=220 pero la conversión usa el ancho total de la ventana.
+//Offset del punto el problema es la conversión screenToWorld
+//El viewport de dibujo empieza en x=220 pero la conversión usa el ancho total de la ventana
 static void screenToWorld(GLFWwindow* w, const double sx, const double sy, float& wx, float& wy) {
     int width, height;
     glfwGetWindowSize(w, &width, &height);
@@ -166,7 +166,7 @@ int main() {
     std::cout << "Lab 06 - Editor Grafico 2D\n"
               << "  [1] Punto  [2] Linea  [3] Polilinea  [4] Poligono  [5] Seleccion\n"
               << "  Flechas: trasladar  R/T: rotar  +/-: escalar  DEL: eliminar\n"
-              << "  Clic derecho / ESC: cancelar figura\n"
+              << "  Clic derecho / ESC: cancelar figura, quitar la seleccion\n"
               << "  Enter: finalizar polilinea\n"
               << "  F: alternar relleno\n"
               << "  Click Derecho finalizar poligono\n";

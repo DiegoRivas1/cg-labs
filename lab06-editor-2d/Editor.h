@@ -15,7 +15,7 @@ public:
     Color        fillColor   = {0.4f, 0.4f, 0.8f, 1.0f};
     bool         fillEnabled = false;
 
-    // Figura en construcción
+    // Figura en construccion
     std::unique_ptr<Shape> current;
     bool                   building = false;
 
