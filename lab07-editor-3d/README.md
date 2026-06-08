@@ -73,7 +73,7 @@ Editor gráfico 3D interactivo con panel lateral ImGui. Permite crear, seleccion
 ### Vista general del editor
 ![Vista general](screenshots/general.png)
 
-### Objetos con distinction colores
+### Objetos con distincion de colores
 ![Objetos](screenshots/objects.png)
 
 ### Modo wireframe
