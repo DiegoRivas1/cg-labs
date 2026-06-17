@@ -2,7 +2,7 @@
 // This needs to be used along with a Platform Backend (e.g. Win32)
 
 // Implemented features:
-//  [X] Renderer: User texture binding. Use 'ID3D10ShaderResourceView*' as texture identifier. Read the FAQ about ImTextureID/ImTextureRef!
+//  [X] Renderer: User textures binding. Use 'ID3D10ShaderResourceView*' as textures identifier. Read the FAQ about ImTextureID/ImTextureRef!
 //  [X] Renderer: Large meshes support (64k+ vertices) even with 16-bit indices (ImGuiBackendFlags_RendererHasVtxOffset).
 //  [X] Renderer: Texture updates support for dynamic font atlas (ImGuiBackendFlags_RendererHasTextures).
 
@@ -22,7 +22,7 @@
 //  2025-06-11: DirectX10: Added support for ImGuiBackendFlags_RendererHasTextures, for dynamic font atlas.
 //  2025-05-07: DirectX10: Honor draw_data->FramebufferScale to allow for custom backends and experiment using it (consistently with other renderer backends, even though in normal condition it is not set under Windows).
 //  2025-01-06: DirectX10: Expose selected render state in ImGui_ImplDX10_RenderState, which you can access in 'void* platform_io.Renderer_RenderState' during draw callbacks.
-//  2024-10-07: DirectX10: Changed default texture sampler to Clamp instead of Repeat/Wrap.
+//  2024-10-07: DirectX10: Changed default textures sampler to Clamp instead of Repeat/Wrap.
 //  2022-10-11: Using 'nullptr' instead of 'NULL' as per our switch to C++11.
 //  2021-06-29: Reorganized backend to pull data from a single structure to facilitate usage with multiple-contexts (all g_XXXX access changed to bd->XXXX).
 //  2021-05-19: DirectX10: Replaced direct access to ImDrawCmd::TextureId with a call to ImDrawCmd::GetTexID(). (will become a requirement)
@@ -169,8 +169,8 @@ void ImGui_ImplDX10_RenderDrawData(ImDrawData* draw_data)
     ImGui_ImplDX10_Data* bd = ImGui_ImplDX10_GetBackendData();
     ID3D10Device* device = bd->pd3dDevice;
 
-    // Catch up with texture updates. Most of the times, the list will have 1 element with an OK status, aka nothing to do.
-    // (This almost always points to ImGui::GetPlatformIO().Textures[] but is part of ImDrawData to allow overriding or disabling texture updates).
+    // Catch up with textures updates. Most of the times, the list will have 1 element with an OK status, aka nothing to do.
+    // (This almost always points to ImGui::GetPlatformIO().Textures[] but is part of ImDrawData to allow overriding or disabling textures updates).
     if (draw_data->Textures != nullptr)
         for (ImTextureData* tex : *draw_data->Textures)
             if (tex->Status != ImTextureStatus_OK)
@@ -262,7 +262,7 @@ void ImGui_ImplDX10_RenderDrawData(ImDrawData* draw_data)
 
     // Setup desired DX state
     ImGui_ImplDX10_SetupRenderState(draw_data, device);
-    // Setup render state structure (for callbacks and custom texture bindings)
+    // Setup render state structure (for callbacks and custom textures bindings)
     ImGuiPlatformIO& platform_io = ImGui::GetPlatformIO();
     ImGui_ImplDX10_RenderState render_state;
     render_state.Device = bd->pd3dDevice;
@@ -300,7 +300,7 @@ void ImGui_ImplDX10_RenderDrawData(ImDrawData* draw_data)
                 const D3D10_RECT r = { (LONG)clip_min.x, (LONG)clip_min.y, (LONG)clip_max.x, (LONG)clip_max.y };
                 device->RSSetScissorRects(1, &r);
 
-                // Bind texture, Draw
+                // Bind textures, Draw
                 ID3D10ShaderResourceView* texture_srv = (ID3D10ShaderResourceView*)pcmd->GetTexID();
                 device->PSSetShaderResources(0, 1, &texture_srv);
                 device->DrawIndexed(pcmd->ElemCount, pcmd->IdxOffset + global_idx_offset, pcmd->VtxOffset + global_vtx_offset);
@@ -350,14 +350,14 @@ void ImGui_ImplDX10_UpdateTexture(ImTextureData* tex)
     ImGui_ImplDX10_Data* bd = ImGui_ImplDX10_GetBackendData();
     if (tex->Status == ImTextureStatus_WantCreate)
     {
-        // Create and upload new texture to graphics system
+        // Create and upload new textures to graphics system
         //IMGUI_DEBUG_LOG("UpdateTexture #%03d: WantCreate %dx%d\n", tex->UniqueID, tex->Width, tex->Height);
         IM_ASSERT(tex->TexID == ImTextureID_Invalid && tex->BackendUserData == nullptr);
         IM_ASSERT(tex->Format == ImTextureFormat_RGBA32);
         unsigned int* pixels = (unsigned int*)tex->GetPixels();
         ImGui_ImplDX10_Texture* backend_tex = IM_NEW(ImGui_ImplDX10_Texture)();
 
-        // Create texture
+        // Create textures
         D3D10_TEXTURE2D_DESC desc;
         ZeroMemory(&desc, sizeof(desc));
         desc.Width = (UINT)tex->Width;
@@ -375,9 +375,9 @@ void ImGui_ImplDX10_UpdateTexture(ImTextureData* tex)
         subResource.SysMemPitch = desc.Width * 4;
         subResource.SysMemSlicePitch = 0;
         bd->pd3dDevice->CreateTexture2D(&desc, &subResource, &backend_tex->pTexture);
-        IM_ASSERT(backend_tex->pTexture != nullptr && "Backend failed to create texture!");
+        IM_ASSERT(backend_tex->pTexture != nullptr && "Backend failed to create textures!");
 
-        // Create texture view
+        // Create textures view
         D3D10_SHADER_RESOURCE_VIEW_DESC srv_desc;
         ZeroMemory(&srv_desc, sizeof(srv_desc));
         srv_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -385,7 +385,7 @@ void ImGui_ImplDX10_UpdateTexture(ImTextureData* tex)
         srv_desc.Texture2D.MipLevels = desc.MipLevels;
         srv_desc.Texture2D.MostDetailedMip = 0;
         bd->pd3dDevice->CreateShaderResourceView(backend_tex->pTexture, &srv_desc, &backend_tex->pTextureView);
-        IM_ASSERT(backend_tex->pTextureView != nullptr && "Backend failed to create texture!");
+        IM_ASSERT(backend_tex->pTextureView != nullptr && "Backend failed to create textures!");
 
         // Store identifiers
         tex->SetTexID((ImTextureID)(intptr_t)backend_tex->pTextureView);
@@ -557,7 +557,7 @@ bool    ImGui_ImplDX10_CreateDeviceObjects()
         bd->pd3dDevice->CreateDepthStencilState(&desc, &bd->pDepthStencilState);
     }
 
-    // Create texture sampler
+    // Create textures sampler
     // (Bilinear sampling is required by default. Set 'io.Fonts->Flags |= ImFontAtlasFlags_NoBakedLines' or 'style.AntiAliasedLinesUseTex = false' to allow point/nearest sampling)
     {
         D3D10_SAMPLER_DESC desc;

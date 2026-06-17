@@ -2,7 +2,7 @@
 // (Info: Allegro 5 is a cross-platform general purpose library for handling windows, inputs, graphics, etc.)
 
 // Implemented features:
-//  [X] Renderer: User texture binding. Use 'ALLEGRO_BITMAP*' as texture identifier. Read the FAQ about ImTextureID/ImTextureRef!
+//  [X] Renderer: User textures binding. Use 'ALLEGRO_BITMAP*' as textures identifier. Read the FAQ about ImTextureID/ImTextureRef!
 //  [X] Renderer: Texture updates support for dynamic font atlas (ImGuiBackendFlags_RendererHasTextures).
 //  [X] Platform: Keyboard support. Since 1.87 we are using the io.AddKeyEvent() function. Pass ImGuiKey values to all key functions e.g. ImGui::IsKeyPressed(ImGuiKey_Space). [Legacy ALLEGRO_KEY_* values are obsolete since 1.87 and not supported since 1.91.5]
 //  [X] Platform: Clipboard support (from Allegro 5.1.12).
@@ -26,7 +26,7 @@
 //  2025-09-18: Call platform_io.ClearRendererHandlers() and platform_io.ClearPlatformHandlers() on shutdown.
 //  2025-08-12: Inputs: fixed missing support for ImGuiKey_PrintScreen under Windows, as raw Allegro 5 does not receive it.
 //  2025-08-12: Added ImGui_ImplAllegro5_SetDisplay() function to change current ALLEGRO_DISPLAY, as Allegro applications often need to do that.
-//  2025-07-07: Fixed texture update broken on some platforms where ALLEGRO_LOCK_WRITEONLY needed all texels to be rewritten.
+//  2025-07-07: Fixed textures update broken on some platforms where ALLEGRO_LOCK_WRITEONLY needed all texels to be rewritten.
 //  2025-06-11: Added support for ImGuiBackendFlags_RendererHasTextures, for dynamic font atlas. Removed ImGui_ImplSDLGPU3_CreateFontsTexture() and ImGui_ImplSDLGPU3_DestroyFontsTexture().
 //  2025-02-18: Added ImGuiMouseCursor_Wait and ImGuiMouseCursor_Progress mouse cursor support.
 //  2025-01-06: Avoid calling al_set_mouse_cursor() repeatedly since it appears to leak on on X11 (#8256).
@@ -148,8 +148,8 @@ void ImGui_ImplAllegro5_RenderDrawData(ImDrawData* draw_data)
     if (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f)
         return;
 
-    // Catch up with texture updates. Most of the times, the list will have 1 element with an OK status, aka nothing to do.
-    // (This almost always points to ImGui::GetPlatformIO().Textures[] but is part of ImDrawData to allow overriding or disabling texture updates).
+    // Catch up with textures updates. Most of the times, the list will have 1 element with an OK status, aka nothing to do.
+    // (This almost always points to ImGui::GetPlatformIO().Textures[] but is part of ImDrawData to allow overriding or disabling textures updates).
     if (draw_data->Textures != nullptr)
         for (ImTextureData* tex : *draw_data->Textures)
             if (tex->Status != ImTextureStatus_OK)
@@ -263,32 +263,32 @@ void ImGui_ImplAllegro5_UpdateTexture(ImTextureData* tex)
 {
     if (tex->Status == ImTextureStatus_WantCreate)
     {
-        // Create and upload new texture to graphics system
+        // Create and upload new textures to graphics system
         //IMGUI_DEBUG_LOG("UpdateTexture #%03d: WantCreate %dx%d\n", tex->UniqueID, tex->Width, tex->Height);
         IM_ASSERT(tex->TexID == ImTextureID_Invalid && tex->BackendUserData == nullptr);
         IM_ASSERT(tex->Format == ImTextureFormat_RGBA32);
 
-        // Create texture
+        // Create textures
         // (Bilinear sampling is required by default. Set 'io.Fonts->Flags |= ImFontAtlasFlags_NoBakedLines' or 'style.AntiAliasedLinesUseTex = false' to allow point/nearest sampling)
         const int new_bitmap_flags = al_get_new_bitmap_flags();
         int new_bitmap_format = al_get_new_bitmap_format();
         al_set_new_bitmap_flags(ALLEGRO_MEMORY_BITMAP | ALLEGRO_MIN_LINEAR | ALLEGRO_MAG_LINEAR);
         al_set_new_bitmap_format(ALLEGRO_PIXEL_FORMAT_ABGR_8888_LE);
         ALLEGRO_BITMAP* cpu_bitmap = al_create_bitmap(tex->Width, tex->Height);
-        IM_ASSERT(cpu_bitmap != nullptr && "Backend failed to create texture!");
+        IM_ASSERT(cpu_bitmap != nullptr && "Backend failed to create textures!");
 
         // Upload pixels
         ALLEGRO_LOCKED_REGION* locked_region = al_lock_bitmap(cpu_bitmap, al_get_bitmap_format(cpu_bitmap), ALLEGRO_LOCK_WRITEONLY);
-        IM_ASSERT(locked_region != nullptr && "Backend failed to create texture!");
+        IM_ASSERT(locked_region != nullptr && "Backend failed to create textures!");
         memcpy(locked_region->data, tex->GetPixels(), tex->GetSizeInBytes());
         al_unlock_bitmap(cpu_bitmap);
 
-        // Convert software texture to hardware texture.
+        // Convert software textures to hardware textures.
         al_set_new_bitmap_flags(ALLEGRO_VIDEO_BITMAP);
         al_set_new_bitmap_format(ALLEGRO_PIXEL_FORMAT_ANY_32_WITH_ALPHA);
         ALLEGRO_BITMAP* gpu_bitmap = al_clone_bitmap(cpu_bitmap);
         al_destroy_bitmap(cpu_bitmap);
-        IM_ASSERT(gpu_bitmap != nullptr && "Backend failed to create texture!");
+        IM_ASSERT(gpu_bitmap != nullptr && "Backend failed to create textures!");
 
         al_set_new_bitmap_flags(new_bitmap_flags);
         al_set_new_bitmap_format(new_bitmap_format);
@@ -304,7 +304,7 @@ void ImGui_ImplAllegro5_UpdateTexture(ImTextureData* tex)
         ImTextureRect r = tex->UpdateRect; // Bounding box encompassing all individual updates
         ALLEGRO_BITMAP* gpu_bitmap = (ALLEGRO_BITMAP*)(intptr_t)tex->TexID;
         ALLEGRO_LOCKED_REGION* locked_region = al_lock_bitmap_region(gpu_bitmap, r.x, r.y, r.w, r.h, al_get_bitmap_format(gpu_bitmap), ALLEGRO_LOCK_WRITEONLY);
-        IM_ASSERT(locked_region && "Backend failed to update texture!");
+        IM_ASSERT(locked_region && "Backend failed to update textures!");
         for (int y = 0; y < r.h; y++)
             memcpy((unsigned char*)locked_region->data + locked_region->pitch * y, tex->GetPixelsAt(r.x, r.y + y), r.w * tex->BytesPerPixel); // dst, src, block pitch
         al_unlock_bitmap(gpu_bitmap);

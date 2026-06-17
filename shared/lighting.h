@@ -8,8 +8,8 @@ inline float lightPos[] = { 5.0f, 10.0f, 5.0f, 1.0f };
 inline void setupLighting() {
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
-    glEnable(GL_COLOR_MATERIAL);
-    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+    //glEnable(GL_COLOR_MATERIAL);
+    //glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
     glShadeModel(GL_SMOOTH);
     // Normalizar normales para corregir efectos cuando hay escalados no uniformes
     glEnable(GL_NORMALIZE);

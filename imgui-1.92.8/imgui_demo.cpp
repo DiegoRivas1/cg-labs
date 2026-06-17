@@ -1869,16 +1869,16 @@ static void DemoWindowWidgetsImages()
         IMGUI_DEMO_MARKER("Widgets/Images");
         ImGuiIO& io = ImGui::GetIO();
         ImGui::TextWrapped(
-            "Below we are displaying the font texture (which is the only texture we have access to in this demo). "
-            "Use the 'ImTextureID' type as storage to pass pointers or identifier to your own texture data. "
-            "Hover the texture for a zoomed view!");
+            "Below we are displaying the font textures (which is the only textures we have access to in this demo). "
+            "Use the 'ImTextureID' type as storage to pass pointers or identifier to your own textures data. "
+            "Hover the textures for a zoomed view!");
 
-        // Below we are displaying the font texture because it is the only texture we have access to inside the demo!
-        // Read description about ImTextureID/ImTextureRef and FAQ for details about texture identifiers.
+        // Below we are displaying the font textures because it is the only textures we have access to inside the demo!
+        // Read description about ImTextureID/ImTextureRef and FAQ for details about textures identifiers.
         // If you use one of the default imgui_impl_XXXX.cpp rendering backend, they all have comments at the top
-        // of their respective source file to specify what they are using as texture identifier, for example:
+        // of their respective source file to specify what they are using as textures identifier, for example:
         // - The imgui_impl_dx11.cpp renderer expect a 'ID3D11ShaderResourceView*' pointer.
-        // - The imgui_impl_opengl3.cpp renderer expect a GLuint OpenGL texture identifier, etc.
+        // - The imgui_impl_opengl3.cpp renderer expect a GLuint OpenGL textures identifier, etc.
         // So with the DirectX11 backend, you call ImGui::Image() with a 'ID3D11ShaderResourceView*' cast to ImTextureID.
         // - If you decided that ImTextureID = MyEngineTexture*, then you can pass your MyEngineTexture* pointers
         //   to ImGui::Image(), and gather width/height through your own functions, etc.
@@ -1888,10 +1888,10 @@ static void DemoWindowWidgetsImages()
         // - Read https://github.com/ocornut/imgui/blob/master/docs/FAQ.md
         // - Read https://github.com/ocornut/imgui/wiki/Image-Loading-and-Displaying-Examples
 
-        // Grab the current texture identifier used by the font atlas.
+        // Grab the current textures identifier used by the font atlas.
         ImFontAtlas* atlas = io.Fonts;
         ImTextureRef my_tex_id = atlas->TexRef;
-        float my_tex_w = (float)atlas->TexData->Width; // Regular user code should never have to care about TexData-> fields, but since we want to display the entire texture here, we pull Width/Height from it.
+        float my_tex_w = (float)atlas->TexData->Width; // Regular user code should never have to care about TexData-> fields, but since we want to display the entire textures here, we pull Width/Height from it.
         float my_tex_h = (float)atlas->TexData->Height;
         ImGui::Text("%.0fx%.0f", my_tex_w, my_tex_h);
 
@@ -1917,14 +1917,14 @@ static void DemoWindowWidgetsImages()
         for (int i = 0; i < 8; i++)
         {
             // UV coordinates are often (0.0f, 0.0f) and (1.0f, 1.0f) to display an entire textures.
-            // Here are trying to display only a 32x32 pixels area of the texture, hence the UV computation.
+            // Here are trying to display only a 32x32 pixels area of the textures, hence the UV computation.
             // Read about UV coordinates here: https://github.com/ocornut/imgui/wiki/Image-Loading-and-Displaying-Examples
             ImGui::PushID(i);
             if (i > 0)
                 ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(i - 1.0f, i - 1.0f));
             ImVec2 size = ImVec2(32.0f, 32.0f);                         // Size of the image we want to make visible
             ImVec2 uv0 = ImVec2(0.0f, 0.0f);                            // UV coordinates for lower-left
-            ImVec2 uv1 = ImVec2(32.0f / my_tex_w, 32.0f / my_tex_h);    // UV coordinates for (32,32) in our texture
+            ImVec2 uv1 = ImVec2(32.0f / my_tex_w, 32.0f / my_tex_h);    // UV coordinates for (32,32) in our textures
             ImVec4 bg_col = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);             // Black background
             ImVec4 tint_col = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);           // No tint
             if (ImGui::ImageButton("", my_tex_id, size, uv0, uv1, bg_col, tint_col))
@@ -8722,9 +8722,9 @@ void ImGui::ShowStyleEditor(ImGuiStyle* ref)
             SameLine();
             HelpMarker("When disabling anti-aliasing lines, you'll probably want to disable borders in your style as well.");
 
-            Checkbox("Anti-aliased lines use texture", &style.AntiAliasedLinesUseTex);
+            Checkbox("Anti-aliased lines use textures", &style.AntiAliasedLinesUseTex);
             SameLine();
-            HelpMarker("Faster lines using texture data. Require backend to render with bilinear filtering (not point/nearest filtering).");
+            HelpMarker("Faster lines using textures data. Require backend to render with bilinear filtering (not point/nearest filtering).");
 
             Checkbox("Anti-aliased fill", &style.AntiAliasedFill);
             PushItemWidth(GetFontSize() * 8);
@@ -9975,7 +9975,7 @@ static void ShowExampleAppConstrainedResize(bool* p_open)
     {
         if (ImGui::GetIO().KeyShift)
         {
-            // Display a dummy viewport (in your real app you would likely use ImageButton() to display a texture)
+            // Display a dummy viewport (in your real app you would likely use ImageButton() to display a textures)
             ImVec2 avail_size = ImGui::GetContentRegionAvail();
             ImVec2 pos = ImGui::GetCursorScreenPos();
             ImGui::ColorButton("viewport", ImVec4(0.5f, 0.2f, 0.5f, 1.0f), ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoDragDrop, avail_size);

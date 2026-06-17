@@ -2,7 +2,7 @@
 // This needs to be used along with a Platform Backend (e.g. OSX)
 
 // Implemented features:
-//  [X] Renderer: User texture binding. Use 'MTLTexture' as texture identifier. Read the FAQ about ImTextureID/ImTextureRef!
+//  [X] Renderer: User textures binding. Use 'MTLTexture' as textures identifier. Read the FAQ about ImTextureID/ImTextureRef!
 //  [X] Renderer: Large meshes support (64k+ vertices) even with 16-bit indices (ImGuiBackendFlags_RendererHasVtxOffset).
 //  [X] Renderer: Texture updates support for dynamic font atlas (ImGuiBackendFlags_RendererHasTextures).
 
@@ -35,7 +35,7 @@
 //  2021-08-24: Metal: Fixed a crash when clipping rect larger than framebuffer is submitted. (#4464)
 //  2021-05-19: Metal: Replaced direct access to ImDrawCmd::TextureId with a call to ImDrawCmd::GetTexID(). (will become a requirement)
 //  2021-02-18: Metal: Change blending equation to preserve alpha in output buffer.
-//  2021-01-25: Metal: Fixed texture storage mode when building on Mac Catalyst.
+//  2021-01-25: Metal: Fixed textures storage mode when building on Mac Catalyst.
 //  2019-05-29: Metal: Added support for large mesh (64K+ vertices), enable ImGuiBackendFlags_RendererHasVtxOffset flag.
 //  2019-04-30: Metal: Added support for special ImDrawCallback_ResetRenderState callback to reset render state.
 //  2019-02-11: Metal: Projecting clipping rectangles correctly using draw_data->FramebufferScale to allow multi-viewports for retina display.
@@ -74,7 +74,7 @@
 
 // A singleton that stores long-lived objects that are needed by the Metal
 // renderer backend. Stores the render pipeline state cache and the default
-// font texture, and manages the reusable buffer cache.
+// font textures, and manages the reusable buffer cache.
 @interface MetalContext : NSObject
 @property (nonatomic, strong) id<MTLDevice>                 device;
 @property (nonatomic, strong) id<MTLDepthStencilState>      depthStencilState;
@@ -209,8 +209,8 @@ void ImGui_ImplMetal_RenderDrawData(ImDrawData* draw_data, id<MTLCommandBuffer> 
     if (fb_width <= 0 || fb_height <= 0 || draw_data->CmdLists.Size == 0)
         return;
 
-    // Catch up with texture updates. Most of the times, the list will have 1 element with an OK status, aka nothing to do.
-    // (This almost always points to ImGui::GetPlatformIO().Textures[] but is part of ImDrawData to allow overriding or disabling texture updates).
+    // Catch up with textures updates. Most of the times, the list will have 1 element with an OK status, aka nothing to do.
+    // (This almost always points to ImGui::GetPlatformIO().Textures[] but is part of ImDrawData to allow overriding or disabling textures updates).
     if (draw_data->Textures != nullptr)
         for (ImTextureData* tex : *draw_data->Textures)
             if (tex->Status != ImTextureStatus_OK)
@@ -285,7 +285,7 @@ void ImGui_ImplMetal_RenderDrawData(ImDrawData* draw_data, id<MTLCommandBuffer> 
                 };
                 [commandEncoder setScissorRect:scissorRect];
 
-                // Bind texture, Draw
+                // Bind textures, Draw
                 ImTextureID tex_id = pcmd->GetTexID();
                 if (tex_id != ImTextureID_Invalid)
                     [commandEncoder setFragmentTexture:(__bridge id<MTLTexture>)(void*)(intptr_t)(tex_id) atIndex:0];
@@ -334,14 +334,14 @@ void ImGui_ImplMetal_UpdateTexture(ImTextureData* tex)
     ImGui_ImplMetal_Data* bd = ImGui_ImplMetal_GetBackendData();
     if (tex->Status == ImTextureStatus_WantCreate)
     {
-        // Create and upload new texture to graphics system
+        // Create and upload new textures to graphics system
         //IMGUI_DEBUG_LOG("UpdateTexture #%03d: WantCreate %dx%d\n", tex->UniqueID, tex->Width, tex->Height);
         IM_ASSERT(tex->TexID == ImTextureID_Invalid && tex->BackendUserData == nullptr);
         IM_ASSERT(tex->Format == ImTextureFormat_RGBA32);
 
-        // We are retrieving and uploading the font atlas as a 4-channels RGBA texture here.
-        // In theory we could call GetTexDataAsAlpha8() and upload a 1-channel texture to save on memory access bandwidth.
-        // However, using a shader designed for 1-channel texture would make it less obvious to use the ImTextureID facility to render users own textures.
+        // We are retrieving and uploading the font atlas as a 4-channels RGBA textures here.
+        // In theory we could call GetTexDataAsAlpha8() and upload a 1-channel textures to save on memory access bandwidth.
+        // However, using a shader designed for 1-channel textures would make it less obvious to use the ImTextureID facility to render users own textures.
         // You can make that change in your implementation.
         MTLTextureDescriptor* textureDescriptor = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatRGBA8Unorm
                                                                                                      width:(NSUInteger)tex->Width
@@ -620,9 +620,9 @@ void ImGui_ImplMetal_Shutdown()
     "}\n"
     "\n"
     "fragment half4 fragment_main(VertexOut in [[stage_in]],\n"
-    "                             texture2d<half, access::sample> texture [[texture(0)]],\n"
+    "                             texture2d<half, access::sample> textures [[textures(0)]],\n"
     "                             sampler textureSampler [[sampler(0)]]) {\n"
-    "    half4 texColor = texture.sample(textureSampler, in.texCoords);\n"
+    "    half4 texColor = textures.sample(textureSampler, in.texCoords);\n"
     "    return half4(in.color) * texColor;\n"
     "}\n";
 

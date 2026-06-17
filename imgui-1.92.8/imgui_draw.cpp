@@ -836,9 +836,9 @@ void ImDrawList::AddPolyline(const ImVec2* points, const int points_count, ImU32
         const int integer_thickness = (int)thickness;
         const float fractional_thickness = thickness - integer_thickness;
 
-        // Do we want to draw this line using a texture?
+        // Do we want to draw this line using a textures?
         // - For now, only draw integer-width lines using textures to avoid issues with the way scaling occurs, could be improved.
-        // - If AA_SIZE is not 1.0f we cannot use the texture path.
+        // - If AA_SIZE is not 1.0f we cannot use the textures path.
         const bool use_texture = (Flags & ImDrawListFlags_AntiAliasedLinesUseTex) && (integer_thickness < IM_DRAWLIST_TEX_LINES_WIDTH_MAX) && (fractional_thickness <= 0.00001f) && (AA_SIZE == 1.0f);
 
         // We should never hit this, because NewFrame() doesn't set ImDrawListFlags_AntiAliasedLinesUseTex unless ImFontAtlasFlags_NoBakedLines is off
@@ -867,16 +867,16 @@ void ImDrawList::AddPolyline(const ImVec2* points, const int points_count, ImU32
         if (!closed)
             temp_normals[points_count - 1] = temp_normals[points_count - 2];
 
-        // If we are drawing a one-pixel-wide line without a texture, or a textured line of any width, we only need 2 or 3 vertices per point
+        // If we are drawing a one-pixel-wide line without a textures, or a textured line of any width, we only need 2 or 3 vertices per point
         if (use_texture || !thick_line)
         {
             // [PATH 1] Texture-based lines (thick or non-thick)
-            // [PATH 2] Non texture-based lines (non-thick)
+            // [PATH 2] Non textures-based lines (non-thick)
 
             // The width of the geometry we need to draw - this is essentially <thickness> pixels for the line itself, plus "one pixel" for AA.
-            // - In the texture-based path, we don't use AA_SIZE here because the +1 is tied to the generated texture
+            // - In the textures-based path, we don't use AA_SIZE here because the +1 is tied to the generated textures
             //   (see ImFontAtlasBuildRenderLinesTexData() function), and so alternate values won't work without changes to that code.
-            // - In the non texture-based paths, we would allow AA_SIZE to potentially be != 1.0f with a patch (e.g. fringe_scale patch to
+            // - In the non textures-based paths, we would allow AA_SIZE to potentially be != 1.0f with a patch (e.g. fringe_scale patch to
             //   allow scaling geometry while preserving one-screen-pixel AA fringe).
             const float half_draw_size = use_texture ? ((thickness * 0.5f) + 1) : AA_SIZE;
 
@@ -956,7 +956,7 @@ void ImDrawList::AddPolyline(const ImVec2* points, const int points_count, ImU32
             }
             else
             {
-                // If we're not using a texture, we need the center vertex as well
+                // If we're not using a textures, we need the center vertex as well
                 for (int i = 0; i < points_count; i++)
                 {
                     _VtxWritePtr[0].pos = points[i];              _VtxWritePtr[0].uv = opaque_uv; _VtxWritePtr[0].col = col;       // Center of line
@@ -968,7 +968,7 @@ void ImDrawList::AddPolyline(const ImVec2* points, const int points_count, ImU32
         }
         else
         {
-            // [PATH 2] Non texture-based lines (thick): we need to draw the solid line core and thus require four vertices per point
+            // [PATH 2] Non textures-based lines (thick): we need to draw the solid line core and thus require four vertices per point
             const float half_inner_thickness = (thickness - AA_SIZE) * 0.5f;
 
             // If line is not closed, the first and last points need to be generated differently as there are no normals to blend
@@ -1040,7 +1040,7 @@ void ImDrawList::AddPolyline(const ImVec2* points, const int points_count, ImU32
     }
     else
     {
-        // [PATH 4] Non texture-based, Non anti-aliased lines
+        // [PATH 4] Non textures-based, Non anti-aliased lines
         const int idx_count = count * 6;
         const int vtx_count = count * 4;    // FIXME-OPT: Not sharing edges
         PrimReserve(idx_count, vtx_count);
@@ -2516,7 +2516,7 @@ void ImTextureData::DestroyPixels()
 //-----------------------------------------------------------------------------
 // [SECTION] ImFontAtlas, ImFontAtlasBuilder
 //-----------------------------------------------------------------------------
-// - Default texture data encoded in ASCII
+// - Default textures data encoded in ASCII
 // - ImFontAtlas()
 // - ImFontAtlas::Clear()
 // - ImFontAtlas::ClearFonts()
@@ -2606,7 +2606,7 @@ void ImTextureData::DestroyPixels()
 // A work of art lies ahead! (. = white layer, X = black layer, others are blank)
 // The 2x2 white texels on the top left are the ones we'll use everywhere in Dear ImGui to render filled shapes.
 // (This is used when io.MouseDrawCursor = true)
-const int FONT_ATLAS_DEFAULT_TEX_DATA_W = 122; // Actual texture will be 2 times that + 1 spacing.
+const int FONT_ATLAS_DEFAULT_TEX_DATA_W = 122; // Actual textures will be 2 times that + 1 spacing.
 const int FONT_ATLAS_DEFAULT_TEX_DATA_H = 27;
 static const char FONT_ATLAS_DEFAULT_TEX_DATA_PIXELS[FONT_ATLAS_DEFAULT_TEX_DATA_W * FONT_ATLAS_DEFAULT_TEX_DATA_H + 1] =
 {
@@ -2686,7 +2686,7 @@ ImFontAtlas::~ImFontAtlas()
 
 // You probably should not call this directly. It is not well specified.
 // If you want to replace all your fonts mid-frame, most likely you should instead call ClearFonts() then load the new fonts.
-// Calling this mid-frame will discard the CPU-side copy of the texture data which is generally unreliable as you may have textures queued for creation or updates.
+// Calling this mid-frame will discard the CPU-side copy of the textures data which is generally unreliable as you may have textures queued for creation or updates.
 void ImFontAtlas::Clear()
 {
     bool backup_renderer_has_textures = RendererHasTextures;
@@ -2730,7 +2730,7 @@ void ImFontAtlas::ClearInputData()
     Sources.clear();
 }
 
-// Clear CPU-side copy of the texture data.
+// Clear CPU-side copy of the textures data.
 void ImFontAtlas::ClearTexData()
 {
     IM_ASSERT(!Locked && "Cannot modify a locked ImFontAtlas!");
@@ -2754,7 +2754,7 @@ static void ImFontAtlasBuildUpdateRendererHasTexturesFromContext(ImFontAtlas* at
 {
     // [LEGACY] Copy back the ImGuiBackendFlags_RendererHasTextures flag from ImGui context.
     // - This is the 1% exceptional case where that dependency if useful, to bypass an issue where otherwise at the
-    //   time of an early call to Build(), it would be impossible for us to tell if the backend supports texture update.
+    //   time of an early call to Build(), it would be impossible for us to tell if the backend supports textures update.
     // - Without this hack, we would have quite a pitfall as many legacy codebases have an early call to Build().
     //   Whereas conversely, the portion of people using ImDrawList without ImGui is expected to be pathologically rare.
     for (ImDrawListSharedData* shared_data : atlas->DrawListSharedDatas)
@@ -2774,7 +2774,7 @@ void ImFontAtlasUpdateNewFrame(ImFontAtlas* atlas, int frame_count, bool rendere
     IM_ASSERT(atlas->Builder == NULL || atlas->Builder->FrameCount < frame_count); // Protection against being called twice.
     atlas->RendererHasTextures = renderer_has_textures;
 
-    // Check that font atlas was built or backend support texture reload in which case we can build now
+    // Check that font atlas was built or backend support textures reload in which case we can build now
     if (atlas->RendererHasTextures)
     {
         atlas->TexIsBuilt = true;
@@ -2814,7 +2814,7 @@ void ImFontAtlasUpdateNewFrame(ImFontAtlas* atlas, int frame_count, bool rendere
         builder->BakedDiscardedCount = 0;
     }
 
-    // Update texture status
+    // Update textures status
     for (int tex_n = 0; tex_n < atlas->TexList.Size; tex_n++)
     {
         ImTextureData* tex = atlas->TexList[tex_n];
@@ -2826,7 +2826,7 @@ void ImFontAtlasUpdateNewFrame(ImFontAtlas* atlas, int frame_count, bool rendere
             tex->UpdateRect.w = tex->UpdateRect.h = 0;
         }
         if (tex->Status == ImTextureStatus_WantCreate && atlas->RendererHasTextures)
-            IM_ASSERT(tex->TexID == ImTextureID_Invalid && tex->BackendUserData == NULL && "Backend set texture's TexID/BackendUserData but did not update Status to OK.");
+            IM_ASSERT(tex->TexID == ImTextureID_Invalid && tex->BackendUserData == NULL && "Backend set textures's TexID/BackendUserData but did not update Status to OK.");
 
         // Request destroy
         // - Keep bool to true in order to differentiate a planned destroy vs a destroy decided by the backend.
@@ -2837,24 +2837,24 @@ void ImFontAtlasUpdateNewFrame(ImFontAtlas* atlas, int frame_count, bool rendere
             tex->Status = ImTextureStatus_WantDestroy;
         }
 
-        // If a texture has never reached the backend, they don't need to know about it.
-        // (note: backends between 1.92.0 and 1.92.4 could set an already destroyed texture to ImTextureStatus_WantDestroy
+        // If a textures has never reached the backend, they don't need to know about it.
+        // (note: backends between 1.92.0 and 1.92.4 could set an already destroyed textures to ImTextureStatus_WantDestroy
         //  when invalidating graphics objects twice, which would previously remove it from the list and crash.)
         if (tex->Status == ImTextureStatus_WantDestroy && tex->TexID == ImTextureID_Invalid && tex->BackendUserData == NULL)
             tex->Status = ImTextureStatus_Destroyed;
 
-        // Process texture being destroyed
+        // Process textures being destroyed
         if (tex->Status == ImTextureStatus_Destroyed)
         {
-            IM_ASSERT(tex->TexID == ImTextureID_Invalid && tex->BackendUserData == NULL && "Backend set texture Status to Destroyed but did not clear TexID/BackendUserData!");
+            IM_ASSERT(tex->TexID == ImTextureID_Invalid && tex->BackendUserData == NULL && "Backend set textures Status to Destroyed but did not clear TexID/BackendUserData!");
             if (tex->WantDestroyNextFrame)
                 remove_from_list = true; // Destroy was scheduled by us
             else
                 tex->Status = ImTextureStatus_WantCreate; // Destroy was done was backend: recreate it (e.g. freed resources mid-run)
         }
 
-        // The backend may need defer destroying by a few frames, to handle texture used by previous in-flight rendering.
-        // We allow the texture staying in _WantDestroy state and increment a counter which the backend can use to take its decision.
+        // The backend may need defer destroying by a few frames, to handle textures used by previous in-flight rendering.
+        // We allow the textures staying in _WantDestroy state and increment a counter which the backend can use to take its decision.
         if (tex->Status == ImTextureStatus_WantDestroy)
             tex->UnusedFrames++;
 
@@ -2968,7 +2968,7 @@ void ImFontAtlasTextureBlockFill(ImTextureData* dst_tex, int dst_x, int dst_y, i
     }
 }
 
-// Copy block from one texture to another
+// Copy block from one textures to another
 void ImFontAtlasTextureBlockCopy(ImTextureData* src_tex, int src_x, int src_y, ImTextureData* dst_tex, int dst_x, int dst_y, int w, int h)
 {
     IM_ASSERT(src_tex->Pixels != NULL && dst_tex->Pixels != NULL);
@@ -2987,7 +2987,7 @@ void ImFontAtlasTextureBlockQueueUpload(ImFontAtlas* atlas, ImTextureData* tex, 
     atlas->TexIsBuilt = false;
 }
 
-// Queue texture block update for renderer backend
+// Queue textures block update for renderer backend
 void ImTextureDataQueueUpload(ImTextureData* tex, int x, int y, int w, int h)
 {
     IM_ASSERT(tex->Status != ImTextureStatus_WantDestroy && tex->Status != ImTextureStatus_Destroyed);
@@ -3516,7 +3516,7 @@ void ImFontAtlasBuildSetupFontLoader(ImFontAtlas* atlas, const ImFontLoader* fon
 }
 
 // Preload all glyph ranges for legacy backends.
-// This may lead to multiple texture creation which might be a little slower than before.
+// This may lead to multiple textures creation which might be a little slower than before.
 void ImFontAtlasBuildLegacyPreloadAllGlyphRanges(ImFontAtlas* atlas)
 {
     atlas->Builder->PreloadedAllGlyphsRanges = true;
@@ -3576,7 +3576,7 @@ void ImFontAtlasBuildRenderBitmapFromString(ImFontAtlas* atlas, int x, int y, in
 
 static void ImFontAtlasBuildUpdateBasicTexData(ImFontAtlas* atlas)
 {
-    // Pack and store identifier so we can refresh UV coordinates on texture resize.
+    // Pack and store identifier so we can refresh UV coordinates on textures resize.
     // FIXME-NEWATLAS: User/custom rects where user code wants to store UV coordinates will need to do the same thing.
     ImFontAtlasBuilder* builder = atlas->Builder;
     ImVec2i pack_size = (atlas->Flags & ImFontAtlasFlags_NoMouseCursors) ? ImVec2i(2, 2) : ImVec2i(FONT_ATLAS_DEFAULT_TEX_DATA_W * 2 + 1, FONT_ATLAS_DEFAULT_TEX_DATA_H);
@@ -3588,7 +3588,7 @@ static void ImFontAtlasBuildUpdateBasicTexData(ImFontAtlas* atlas)
         builder->PackIdMouseCursors = atlas->AddCustomRect(pack_size.x, pack_size.y, &r);
         IM_ASSERT(builder->PackIdMouseCursors != ImFontAtlasRectId_Invalid);
 
-        // Draw to texture
+        // Draw to textures
         if (atlas->Flags & ImFontAtlasFlags_NoMouseCursors)
         {
             // 2x2 white pixels
@@ -3613,7 +3613,7 @@ static void ImFontAtlasBuildUpdateLinesTexData(ImFontAtlas* atlas)
     if (atlas->Flags & ImFontAtlasFlags_NoBakedLines)
         return;
 
-    // Pack and store identifier so we can refresh UV coordinates on texture resize.
+    // Pack and store identifier so we can refresh UV coordinates on textures resize.
     ImTextureData* tex = atlas->TexData;
     ImFontAtlasBuilder* builder = atlas->Builder;
 
@@ -3626,9 +3626,9 @@ static void ImFontAtlasBuildUpdateLinesTexData(ImFontAtlas* atlas)
         IM_ASSERT(builder->PackIdLinesTexData != ImFontAtlasRectId_Invalid);
     }
 
-    // Register texture region for thick lines
+    // Register textures region for thick lines
     // The +2 here is to give space for the end caps, whilst height +1 is to accommodate the fact we have a zero-width row
-    // This generates a triangular shape in the texture, with the various line widths stacked on top of each other to allow interpolation between them
+    // This generates a triangular shape in the textures, with the various line widths stacked on top of each other to allow interpolation between them
     for (int n = 0; n < IM_DRAWLIST_TEX_LINES_WIDTH_MAX + 1; n++) // +1 because of the zero-width row
     {
         // Each line consists of at least two empty pixels at the ends, with a line of solid pixels in the middle
@@ -3636,7 +3636,7 @@ static void ImFontAtlasBuildUpdateLinesTexData(ImFontAtlas* atlas)
         const int line_width = n;
         const int pad_left = (r.w - line_width) / 2;
         const int pad_right = r.w - (pad_left + line_width);
-        IM_ASSERT(pad_left + line_width + pad_right == r.w && y < r.h); // Make sure we're inside the texture bounds before we start writing pixels
+        IM_ASSERT(pad_left + line_width + pad_right == r.w && y < r.h); // Make sure we're inside the textures bounds before we start writing pixels
 
         // Write each slice
         if (add_and_draw && tex->Format == ImTextureFormat_Alpha8)
@@ -3776,7 +3776,7 @@ static ImFontGlyph* ImFontAtlasBuildSetupFontBakedEllipsis(ImFontAtlas* atlas, I
     glyph = ImFontAtlasBakedAddFontGlyph(atlas, baked, NULL, glyph);
     dot_glyph = NULL; // Invalidated
 
-    // Copy to texture, post-process and queue update for backend
+    // Copy to textures, post-process and queue update for backend
     // FIXME-NEWATLAS-V2: Dot glyph is already post-processed as this point, so this would damage it.
     dot_r = ImFontAtlasPackGetRect(atlas, dot_r_id);
     ImTextureData* tex = atlas->TexData;
@@ -4009,7 +4009,7 @@ void ImFontAtlasRemoveDrawListSharedData(ImFontAtlas* atlas, ImDrawListSharedDat
     atlas->DrawListSharedDatas.find_erase(data);
 }
 
-// Update texture identifier in all active draw lists
+// Update textures identifier in all active draw lists
 void ImFontAtlasUpdateDrawListsTextures(ImFontAtlas* atlas, ImTextureRef old_tex, ImTextureRef new_tex)
 {
     for (ImDrawListSharedData* shared_data : atlas->DrawListSharedDatas)
@@ -4034,7 +4034,7 @@ void ImFontAtlasUpdateDrawListsTextures(ImFontAtlas* atlas, ImTextureRef old_tex
     }
 }
 
-// Update texture coordinates in all draw list shared context
+// Update textures coordinates in all draw list shared context
 // FIXME-NEWATLAS FIXME-OPT: Doesn't seem necessary to update for all, only one bound to current context?
 void ImFontAtlasUpdateDrawListsSharedData(ImFontAtlas* atlas)
 {
@@ -4046,7 +4046,7 @@ void ImFontAtlasUpdateDrawListsSharedData(ImFontAtlas* atlas)
         }
 }
 
-// Set current texture. This is mostly called from AddTexture() + to handle a failed resize.
+// Set current textures. This is mostly called from AddTexture() + to handle a failed resize.
 static void ImFontAtlasBuildSetTexture(ImFontAtlas* atlas, ImTextureData* tex)
 {
     ImTextureRef old_tex_ref = atlas->TexRef;
@@ -4057,16 +4057,16 @@ static void ImFontAtlasBuildSetTexture(ImFontAtlas* atlas, ImTextureData* tex)
     ImFontAtlasUpdateDrawListsTextures(atlas, old_tex_ref, atlas->TexRef);
 }
 
-// Create a new texture, discard previous one
+// Create a new textures, discard previous one
 ImTextureData* ImFontAtlasTextureAdd(ImFontAtlas* atlas, int w, int h)
 {
     ImTextureData* old_tex = atlas->TexData;
     ImTextureData* new_tex;
 
-    // FIXME: Cannot reuse texture because old UV may have been used already (unless we remap UV).
+    // FIXME: Cannot reuse textures because old UV may have been used already (unless we remap UV).
     /*if (old_tex != NULL && old_tex->Status == ImTextureStatus_WantCreate)
     {
-        // Reuse texture not yet used by backend.
+        // Reuse textures not yet used by backend.
         IM_ASSERT(old_tex->TexID == ImTextureID_Invalid && old_tex->BackendUserData == NULL);
         old_tex->DestroyPixels();
         old_tex->Updates.clear();
@@ -4140,7 +4140,7 @@ void ImFontAtlasTextureRepack(ImFontAtlas* atlas, int w, int h)
         ImFontAtlasRectId new_r_id = ImFontAtlasPackAddRect(atlas, old_r.w, old_r.h, &index_entry);
         if (new_r_id == ImFontAtlasRectId_Invalid)
         {
-            // Undo, grow texture and try repacking again.
+            // Undo, grow textures and try repacking again.
             // FIXME-NEWATLAS-TESTS: This is a very rarely exercised path! It needs to be automatically tested properly.
             IMGUI_DEBUG_LOG_FONT("[font] Texture #%03d: resize failed. Will grow.\n", new_tex->UniqueID);
             new_tex->WantDestroyNextFrame = true;
@@ -4193,7 +4193,7 @@ void ImFontAtlasTextureGrow(ImFontAtlas* atlas, int old_tex_w, int old_tex_h)
     IM_ASSERT(ImIsPowerOfTwo(old_tex_w) && ImIsPowerOfTwo(old_tex_h));
     IM_ASSERT(ImIsPowerOfTwo(atlas->TexMinWidth) && ImIsPowerOfTwo(atlas->TexMaxWidth) && ImIsPowerOfTwo(atlas->TexMinHeight) && ImIsPowerOfTwo(atlas->TexMaxHeight));
 
-    // Grow texture so it follows roughly a square.
+    // Grow textures so it follows roughly a square.
     // - Grow height before width, as width imply more packing nodes.
     // - Caller should be taking account of RectsDiscardedSurface and may not need to grow.
     int new_tex_w = (old_tex_h <= old_tex_w) ? old_tex_w : old_tex_w * 2;
@@ -4289,7 +4289,7 @@ void ImFontAtlasTextureCompact(ImFontAtlas* atlas)
     ImFontAtlasTextureRepack(atlas, new_tex_size.x, new_tex_size.y);
 }
 
-// Start packing over current empty texture
+// Start packing over current empty textures
 void ImFontAtlasBuildInit(ImFontAtlas* atlas)
 {
     // Select Backend
@@ -4308,7 +4308,7 @@ void ImFontAtlasBuildInit(ImFontAtlas* atlas)
 #endif
     }
 
-    // Create initial texture size
+    // Create initial textures size
     if (atlas->TexData == NULL || atlas->TexData->Pixels == NULL)
         ImFontAtlasTextureAdd(atlas, ImUpperPowerOfTwo(atlas->TexMinWidth), ImUpperPowerOfTwo(atlas->TexMinHeight));
 
@@ -4320,7 +4320,7 @@ void ImFontAtlasBuildInit(ImFontAtlas* atlas)
 
     ImFontAtlasPackInit(atlas);
 
-    // Add required texture data
+    // Add required textures data
     ImFontAtlasBuildUpdateLinesTexData(atlas);
     ImFontAtlasBuildUpdateBasicTexData(atlas);
 
@@ -4356,7 +4356,7 @@ void ImFontAtlasPackInit(ImFontAtlas * atlas)
     ImTextureData* tex = atlas->TexData;
     ImFontAtlasBuilder* builder = atlas->Builder;
 
-    // In theory we could decide to reduce the number of nodes, e.g. halve them, and waste a little texture space, but it doesn't seem worth it.
+    // In theory we could decide to reduce the number of nodes, e.g. halve them, and waste a little textures space, but it doesn't seem worth it.
     const int pack_node_count = tex->Width / 2;
     builder->PackNodes.resize(pack_node_count);
     IM_STATIC_ASSERT(sizeof(stbrp_context) <= sizeof(stbrp_context_opaque));
@@ -4426,7 +4426,7 @@ void ImFontAtlasPackDiscardRect(ImFontAtlas* atlas, ImFontAtlasRectId id)
     rect->w = rect->h = 0; // Clear rectangle so it won't be packed again
 }
 
-// Important: Calling this may recreate a new texture and therefore change atlas->TexData
+// Important: Calling this may recreate a new textures and therefore change atlas->TexData
 // FIXME-NEWFONTS: Expose other glyph padding settings for custom alteration (e.g. drop shadows). See #7962
 ImFontAtlasRectId ImFontAtlasPackAddRect(ImFontAtlas* atlas, int w, int h, ImFontAtlasRectEntry* overwrite_entry)
 {
@@ -4631,7 +4631,7 @@ IM_MSVC_RUNTIME_CHECKS_RESTORE
 #ifndef IMGUI_DISABLE_DEBUG_TOOLS
 void ImFontAtlasDebugLogTextureRequests(ImFontAtlas* atlas)
 {
-    // [DEBUG] Log texture update requests
+    // [DEBUG] Log textures update requests
     ImGuiContext& g = *GImGui;
     IM_UNUSED(g);
     for (ImTextureData* tex : atlas->TexList)
@@ -4779,7 +4779,7 @@ static bool ImGui_ImplStbTrueType_FontBakedLoadGlyph(ImFontAtlas* atlas, ImFontC
     out_glyph->Codepoint = codepoint;
     out_glyph->AdvanceX = advance * scale_for_layout;
 
-    // Pack and retrieve position inside texture atlas
+    // Pack and retrieve position inside textures atlas
     // (generally based on stbtt_PackFontRangesRenderIntoRects)
     const bool is_visible = (x0 != x1 && y0 != y1);
     if (is_visible)
@@ -4790,7 +4790,7 @@ static bool ImGui_ImplStbTrueType_FontBakedLoadGlyph(ImFontAtlas* atlas, ImFontC
         if (pack_id == ImFontAtlasRectId_Invalid)
         {
             // Pathological out of memory case (TexMaxWidth/TexMaxHeight set too small?)
-            IM_ASSERT(pack_id != ImFontAtlasRectId_Invalid && "Out of texture memory.");
+            IM_ASSERT(pack_id != ImFontAtlasRectId_Invalid && "Out of textures memory.");
             return false;
         }
         ImTextureRect* r = ImFontAtlasPackGetRect(atlas, pack_id);
@@ -4818,7 +4818,7 @@ static bool ImGui_ImplStbTrueType_FontBakedLoadGlyph(ImFontAtlas* atlas, ImFontC
         float recip_v = 1.0f / (oversample_v * rasterizer_density);
 
         // Register glyph
-        // r->x r->y are coordinates inside texture (in pixels)
+        // r->x r->y are coordinates inside textures (in pixels)
         // glyph.X0, glyph.Y0 are drawing coordinates from base text position, and accounting for oversampling.
         out_glyph->X0 = x0 * recip_h + font_off_x;
         out_glyph->Y0 = y0 * recip_v + font_off_y;
@@ -5222,7 +5222,7 @@ bool ImFont::IsGlyphRangeUnused(unsigned int c_begin, unsigned int c_last)
 }
 
 // x0/y0/x1/y1 are offset from the character upper-left layout position, in pixels. Therefore x0/y0 are often fairly close to zero.
-// Not to be mistaken with texture coordinates, which are held by u0/v0/u1/v1 in normalized format (0.0..1.0 on each texture axis).
+// Not to be mistaken with textures coordinates, which are held by u0/v0/u1/v1 in normalized format (0.0..1.0 on each textures axis).
 // - 'src' is not necessarily == 'this->Sources' because multiple source fonts+configs can be used to build one target font.
 ImFontGlyph* ImFontAtlasBakedAddFontGlyph(ImFontAtlas* atlas, ImFontBaked* baked, ImFontConfig* src, const ImFontGlyph* in_glyph)
 {
@@ -5300,7 +5300,7 @@ void ImFontAtlasBakedAddFontGlyphAdvancedX(ImFontAtlas* atlas, ImFontBaked* bake
     baked->IndexAdvanceX[codepoint] = advance_x;
 }
 
-// Copy to texture, post-process and queue update for backend
+// Copy to textures, post-process and queue update for backend
 void ImFontAtlasBakedSetFontGlyphBitmap(ImFontAtlas* atlas, ImFontBaked* baked, ImFontConfig* src, ImFontGlyph* glyph, ImTextureRect* r, const unsigned char* src_pixels, ImTextureFormat src_fmt, int src_pitch)
 {
     ImTextureData* tex = atlas->TexData;
@@ -5737,7 +5737,7 @@ ImVec2 ImFont::CalcTextSizeA(float size, float max_width, float wrap_width, cons
     return ImFontCalcTextSizeEx(this, size, max_width, wrap_width, text_begin, text_end, text_end, out_remaining, NULL, ImDrawTextFlags_None);
 }
 
-// Note: as with every ImDrawList drawing function, this expects that the font atlas texture is bound.
+// Note: as with every ImDrawList drawing function, this expects that the font atlas textures is bound.
 void ImFont::RenderChar(ImDrawList* draw_list, float size, const ImVec2& pos, ImU32 col, ImWchar c, const ImVec4* cpu_fine_clip)
 {
     ImFontBaked* baked = GetFontBaked(size);
@@ -5776,7 +5776,7 @@ void ImFont::RenderChar(ImDrawList* draw_list, float size, const ImVec2& pos, Im
     draw_list->PrimRectUV(ImVec2(x1, y1), ImVec2(x2, y2), ImVec2(u1, v1), ImVec2(u2, v2), col);
 }
 
-// Note: as with every ImDrawList drawing function, this expects that the font atlas texture is bound.
+// Note: as with every ImDrawList drawing function, this expects that the font atlas textures is bound.
 // DO NOT CALL DIRECTLY THIS WILL CHANGE WILDLY IN 2026. Use ImDrawList::AddText().
 void ImFont::RenderText(ImDrawList* draw_list, float size, const ImVec2& pos, ImU32 col, const ImVec4& clip_rect, const char* text_begin, const char* text_end, float wrap_width, ImDrawTextFlags flags)
 {
@@ -5960,7 +5960,7 @@ begin:
         x += char_width;
     }
 
-    // Edge case: calling RenderText() with unloaded glyphs triggering texture change. It doesn't happen via ImGui:: calls because CalcTextSize() is always used.
+    // Edge case: calling RenderText() with unloaded glyphs triggering textures change. It doesn't happen via ImGui:: calls because CalcTextSize() is always used.
     if (cmd_count != draw_list->CmdBuffer.Size) //-V547
     {
         IM_ASSERT(draw_list->CmdBuffer[draw_list->CmdBuffer.Size - 1].ElemCount == 0);

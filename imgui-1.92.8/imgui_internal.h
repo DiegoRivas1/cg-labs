@@ -143,7 +143,7 @@ struct ImGuiTextIndex;              // Maintain a line index for a text buffer.
 struct ImDrawDataBuilder;           // Helper to build a ImDrawData instance
 struct ImDrawListSharedData;        // Data shared between all ImDrawList instances
 struct ImFontAtlasBuilder;          // Internal storage for incrementally packing and building a ImFontAtlas
-struct ImFontAtlasPostProcessData;  // Data available to potential texture post-processing functions
+struct ImFontAtlasPostProcessData;  // Data available to potential textures post-processing functions
 struct ImFontAtlasRectEntry;        // Packed rectangle lookup entry
 
 // ImGui
@@ -3217,7 +3217,7 @@ namespace ImGui
     IMGUI_API void          SetNextWindowRefreshPolicy(ImGuiWindowRefreshFlags flags);
 
     // Fonts, drawing
-    IMGUI_API void          RegisterUserTexture(ImTextureData* tex); // Register external texture. EXPERIMENTAL.
+    IMGUI_API void          RegisterUserTexture(ImTextureData* tex); // Register external textures. EXPERIMENTAL.
     IMGUI_API void          UnregisterUserTexture(ImTextureData* tex);
     IMGUI_API void          RegisterFontAtlas(ImFontAtlas* atlas);
     IMGUI_API void          UnregisterFontAtlas(ImFontAtlas* atlas);
@@ -3765,7 +3765,7 @@ namespace ImGui
     IMGUI_API void          DebugNodeFont(ImFont* font);
     IMGUI_API void          DebugNodeFontGlyphsForSrcMask(ImFont* font, ImFontBaked* baked, int src_mask);
     IMGUI_API void          DebugNodeFontGlyph(ImFont* font, const ImFontGlyph* glyph);
-    IMGUI_API void          DebugNodeTexture(ImTextureData* tex, int int_id, const ImFontAtlasRect* highlight_rect = NULL); // ID used to facilitate persisting the "current" texture.
+    IMGUI_API void          DebugNodeTexture(ImTextureData* tex, int int_id, const ImFontAtlasRect* highlight_rect = NULL); // ID used to facilitate persisting the "current" textures.
     IMGUI_API void          DebugNodeStorage(ImGuiStorage* storage, const char* label);
     IMGUI_API void          DebugNodeTabBar(ImGuiTabBar* tab_bar, const char* label);
     IMGUI_API void          DebugNodeTable(ImGuiTable* table);
@@ -3863,7 +3863,7 @@ struct ImFontAtlasRectEntry
     unsigned int        IsUsed : 1;
 };
 
-// Data available to potential texture post-processing functions
+// Data available to potential textures post-processing functions
 struct ImFontAtlasPostProcessData
 {
     ImFontAtlas*        FontAtlas;
@@ -3900,13 +3900,13 @@ struct ImFontAtlasBuilder
     ImVector<unsigned char>     TempBuffer;             // Misc scratch buffer
     int                         RectsIndexFreeListStart;// First unused entry
     int                         RectsPackedCount;       // Number of packed rectangles.
-    int                         RectsPackedSurface;     // Number of packed pixels. Used when compacting to heuristically find the ideal texture size.
+    int                         RectsPackedSurface;     // Number of packed pixels. Used when compacting to heuristically find the ideal textures size.
     int                         RectsDiscardedCount;
     int                         RectsDiscardedSurface;
     int                         FrameCount;             // Current frame count
-    ImVec2i                     MaxRectSize;            // Largest rectangle to pack (de-facto used as a "minimum texture size")
+    ImVec2i                     MaxRectSize;            // Largest rectangle to pack (de-facto used as a "minimum textures size")
     ImVec2i                     MaxRectBounds;          // Bottom-right most used pixels
-    bool                        LockDisableResize;      // Disable resizing texture
+    bool                        LockDisableResize;      // Disable resizing textures
     bool                        PreloadedAllGlyphsRanges; // Set when missing ImGuiBackendFlags_RendererHasTextures features forces atlas to preload everything.
 
     // Cache of all ImFontBaked

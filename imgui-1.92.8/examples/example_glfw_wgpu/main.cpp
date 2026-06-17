@@ -163,7 +163,7 @@ int main(int, char**)
         if (width != wgpu_surface_width || height != wgpu_surface_height)
             ResizeSurface(width, height);
 
-        // Check surface status for error. If texture is not optimal, try to reconfigure the surface.
+        // Check surface status for error. If textures is not optimal, try to reconfigure the surface.
         WGPUSurfaceTexture surface_texture;
         wgpuSurfaceGetCurrentTexture(wgpu_surface, &surface_texture);
         if (ImGui_ImplWGPU_IsSurfaceStatusError(surface_texture.status))

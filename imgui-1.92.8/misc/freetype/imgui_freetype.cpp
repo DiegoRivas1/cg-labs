@@ -14,13 +14,13 @@
 //  2023/01/04: fixed a packing issue which in some occurrences would prevent large amount of glyphs from being packed correctly.
 //  2021/08/23: fixed crash when FT_Render_Glyph() fails to render a glyph and returns nullptr.
 //  2021/03/05: added ImGuiFreeTypeBuilderFlags_Bitmap to load bitmap glyphs.
-//  2021/03/02: set 'atlas->TexPixelsUseColors = true' to help some backends with deciding of a preferred texture format.
+//  2021/03/02: set 'atlas->TexPixelsUseColors = true' to help some backends with deciding of a preferred textures format.
 //  2021/01/28: added support for color-layered glyphs via ImGuiFreeTypeBuilderFlags_LoadColor (require Freetype 2.10+).
 //  2021/01/26: simplified integration by using '#define IMGUI_ENABLE_FREETYPE'. renamed ImGuiFreeType::XXX flags to ImGuiFreeTypeBuilderFlags_XXX for consistency with other API. removed ImGuiFreeType::BuildFontAtlas().
 //  2020/06/04: fix for rare case where FT_Get_Char_Index() succeed but FT_Load_Glyph() fails.
 //  2019/02/09: added RasterizerFlags::Monochrome flag to disable font anti-aliasing (combine with ::MonoHinting for best results!)
 //  2019/01/15: added support for imgui allocators + added FreeType only override function SetAllocatorFunctions().
-//  2019/01/10: re-factored to match big update in STB builder. fixed texture height waste. fixed redundant glyphs when merging. support for glyph padding.
+//  2019/01/10: re-factored to match big update in STB builder. fixed textures height waste. fixed redundant glyphs when merging. support for glyph padding.
 //  2018/06/08: added support for ImFontConfig::GlyphMinAdvanceX, GlyphMaxAdvanceX.
 //  2018/02/04: moved to main imgui repository (away from http://www.github.com/ocornut/imgui_club)
 //  2018/01/22: fix for addition of ImFontAtlas::TexUvscale member.
@@ -530,14 +530,14 @@ static bool ImGui_ImplFreeType_FontBakedLoadGlyph(ImFontAtlas* atlas, ImFontConf
     out_glyph->Codepoint = codepoint;
     out_glyph->AdvanceX = advance_x;
 
-    // Pack and retrieve position inside texture atlas
+    // Pack and retrieve position inside textures atlas
     if (is_visible)
     {
         ImFontAtlasRectId pack_id = ImFontAtlasPackAddRect(atlas, w, h);
         if (pack_id == ImFontAtlasRectId_Invalid)
         {
             // Pathological out of memory case (TexMaxWidth/TexMaxHeight set too small?)
-            IM_ASSERT(pack_id != ImFontAtlasRectId_Invalid && "Out of texture memory.");
+            IM_ASSERT(pack_id != ImFontAtlasRectId_Invalid && "Out of textures memory.");
             return false;
         }
         ImTextureRect* r = ImFontAtlasPackGetRect(atlas, pack_id);
