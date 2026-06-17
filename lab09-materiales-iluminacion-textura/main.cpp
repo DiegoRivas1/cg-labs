@@ -52,20 +52,20 @@ static void mouseButtonCallback(GLFWwindow*, int button, int action, int) {
 
 static void cursorPosCallback(GLFWwindow*, double x, double y) {
     if (dragging) {
-        rotY += ((float)x - lastX) * 0.4f;
-        rotX += ((float)y - lastY) * 0.4f;
+        rotY += (static_cast<float>(x) - lastX) * 0.4f;
+        rotX += (static_cast<float>(y) - lastY) * 0.4f;
         rotX = std::max(-89.0f, std::min(89.0f, rotX));
     }
-    lastX=(float)x; lastY=(float)y;
+    lastX=static_cast<float>(x); lastY=static_cast<float>(y);
 }
 
 static void scrollCallback(GLFWwindow*, double, double dy) {
     if (ImGui::GetIO().WantCaptureMouse) return;
-    dist -= (float)dy;
+    dist -= static_cast<float>(dy);
     dist  = std::max(5.0f, std::min(80.0f, dist));
 }
 
-static void keyCallback(GLFWwindow* w, int key, int, int action, int) {
+static void keyCallback(GLFWwindow* w, const int key, int, const int action, int) {
     if (action != GLFW_PRESS) return;
     if (key == GLFW_KEY_ESCAPE) glfwSetWindowShouldClose(w, GLFW_TRUE);
     if (key == GLFW_KEY_1) sceneIndex = 0;
@@ -76,10 +76,10 @@ static void keyCallback(GLFWwindow* w, int key, int, int action, int) {
 
 static void applyTrackball() {
     glLoadIdentity();
-    float rad = 3.14159265f / 180.0f;
-    float ex = dist * std::sin(rotY*rad) * std::cos(rotX*rad);
-    float ey = dist * std::sin(rotX*rad);
-    float ez = dist * std::cos(rotY*rad) * std::cos(rotX*rad);
+    constexpr float rad = 3.14159265f / 180.0f;
+    const float ex = dist * std::sin(rotY*rad) * std::cos(rotX*rad);
+    const float ey = dist * std::sin(rotX*rad);
+    const float ez = dist * std::cos(rotY*rad) * std::cos(rotX*rad);
     gluLookAt(ex, ey, ez,  0, 2, 0,  0, 1, 0);
     if (directionalLight) setLightDirectional();
     else                  setLightPoint();
@@ -99,7 +99,7 @@ static void drawGizmo() {
 
 static void drawUI() {
     ImGui::SetNextWindowPos({0,0});
-    ImGui::SetNextWindowSize({(float)PANEL,(float)HEIGHT});
+    ImGui::SetNextWindowSize({static_cast<float>(PANEL),static_cast<float>(HEIGHT)});
     ImGui::Begin("Lab 09", nullptr,
         ImGuiWindowFlags_NoResize|ImGuiWindowFlags_NoMove|
         ImGuiWindowFlags_NoCollapse|ImGuiWindowFlags_NoBringToFrontOnFocus);
@@ -152,7 +152,7 @@ int main() {
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(45.0, (double)(WIDTH-PANEL)/HEIGHT, 0.1, 200.0);
+    gluPerspective(45.0, static_cast<double>(WIDTH - PANEL)/HEIGHT, 0.1, 200.0);
     glMatrixMode(GL_MODELVIEW);
 
     scenes[0] = std::make_unique<SceneMaterials>();
@@ -171,7 +171,7 @@ int main() {
         setSceneBackground(sceneIndex);
         glViewport(PANEL, 0, WIDTH-PANEL, HEIGHT);
         applyTrackball();
-        scenes[sceneIndex]->render((float)glfwGetTime());
+        scenes[sceneIndex]->render(static_cast<float>(glfwGetTime()));
         drawGizmo();
 
         glViewport(0, 0, WIDTH, HEIGHT);

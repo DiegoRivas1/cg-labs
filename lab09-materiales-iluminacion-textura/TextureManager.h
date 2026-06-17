@@ -36,9 +36,9 @@ public:
             for (int x = 0; x < size; ++x) {
                 int i = (y * size + x) * 3;
                 float n = noise(x * 0.15f, y * 0.15f);
-                px[i+0] = (unsigned char)(30  + n * 20);
-                px[i+1] = (unsigned char)(100 + n * 50);
-                px[i+2] = (unsigned char)(20  + n * 15);
+                px[i+0] = static_cast<unsigned char>(30 + n * 20);
+                px[i+1] = static_cast<unsigned char>(100 + n * 50);
+                px[i+2] = static_cast<unsigned char>(20 + n * 15);
             }
         GLuint id = upload(px, size, size, GL_RGB);
         delete[] px;

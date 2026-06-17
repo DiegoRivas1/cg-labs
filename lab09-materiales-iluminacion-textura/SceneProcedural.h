@@ -6,7 +6,7 @@ class SceneProcedural : public Scene {
     GLuint texGrass=0, texBrick=0, texTile=0, texWood=0, texLeaves=0;
 
 public:
-    const char* name() const override { return "Escena 2 - Texturas Procedurales"; }
+    [[nodiscard]] const char* name() const override { return "Escena 2 - Texturas Procedurales"; }
 
     void init() override {
         texGrass  = TextureManager::makeGrass();

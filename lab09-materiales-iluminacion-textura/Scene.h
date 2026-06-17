@@ -14,23 +14,23 @@ public:
     virtual void init() {}
     virtual void render(float t) = 0;
     virtual void cleanup() {}
-    virtual const char* name() const = 0;
+    [[nodiscard]] virtual const char* name() const = 0;
 
 protected:
-    void setupCamera() {
+    static void setupCamera() {
         glLoadIdentity();
         gluLookAt(15, 12, 25,  0, 2, 0,  0, 1, 0);
         if (directionalLight) setLightDirectional();
         else                  setLightPoint();
     }
 
-    void drawSceneGeometry(
+    static void drawSceneGeometry(
         const std::function<void()>& applyTerrain,
         const std::function<void()>& applyWall,
         const std::function<void()>& applyRoof,
         const std::function<void()>& applyTrunk,
         const std::function<void()>& applyFoliage,
-        float texRepeat = 2.0f)
+        const float texRepeat = 2.0f)
     {
         // Terreno
         glPushMatrix();
@@ -38,13 +38,13 @@ protected:
             drawTerrain(texRepeat);
         glPopMatrix();
 
-        // Casa — paredes
+        // Casa paredes
         glPushMatrix();
             applyWall();
             drawHouseWalls(texRepeat);
         glPopMatrix();
 
-        // Casa — techo (material/textura diferente)
+        // Casa techo (material/textura diferente)
         glPushMatrix();
             applyRoof();
             drawHouseRoof(texRepeat);

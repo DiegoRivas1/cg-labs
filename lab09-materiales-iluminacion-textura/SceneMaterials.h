@@ -3,7 +3,7 @@
 
 class SceneMaterials : public Scene {
 public:
-    const char* name() const override { return "Escena 1 - Materiales"; }
+    [[nodiscard]] const char* name() const override { return "Escena 1 - Materiales"; }
 
     void render(float t) override {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
